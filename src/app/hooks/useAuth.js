@@ -2,44 +2,82 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db } from "@/firebase/firebase";
-import { signOut } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 const useAuth = () => {
   const [user, setUser] = useState(null);
-  const [userProfile, setUserProfile] = useState(null);
+  const [userProfile, setUserProfile] = useState({});
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-        setUserProfile(JSON.parse(localStorage.getItem("userProfile")));
-        localStorage.setItem("user", JSON.stringify(user));
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+
+        let profile = null;
+        try {
+          const storedProfile = localStorage.getItem("userProfile");
+          profile = storedProfile ? JSON.parse(storedProfile) : null;
+        } catch (error) {
+          profile = null;
+        }
+
+        if (!profile) {
+          try {
+            const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+            profile = userDoc.exists()
+              ? { uid: currentUser.uid, ...userDoc.data() }
+              : {
+                  uid: currentUser.uid,
+                  email: currentUser.email,
+                  name: currentUser.displayName || currentUser.email,
+                };
+          } catch (error) {
+            profile = {
+              uid: currentUser.uid,
+              email: currentUser.email,
+              name: currentUser.displayName || currentUser.email,
+            };
+          }
+        }
+
+        setUserProfile(profile);
+        localStorage.setItem("user", JSON.stringify(currentUser));
       } else {
         setUser(null);
+        setUserProfile({});
         localStorage.removeItem("userProfile");
         localStorage.removeItem("user");
       }
     });
 
     return () => unsubscribe();
-  }, [auth]);
+  }, []);
 
   const handleLogout = async () => {
+    if (!user?.uid) {
+      await signOut(auth);
+      router.push("/sign-in");
+      return;
+    }
+
     const docRef = doc(db, "users", user.uid);
-    await updateDoc(docRef, {
-      status: "offline",
-    });
+    try {
+      await updateDoc(docRef, {
+        status: "offline",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
     signOut(auth)
       .then(() => {
-        // Sign-out successful.
         router.push("/sign-in");
         localStorage.removeItem("user");
         localStorage.removeItem("userProfile");
       })
       .catch((error) => {
-        // An error happened.
         console.log(error);
       });
   };

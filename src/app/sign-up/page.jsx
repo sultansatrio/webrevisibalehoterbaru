@@ -308,7 +308,6 @@ const SignUp = () => {
           name: formData.fullName,
           role: "user",
           email: formData.email,
-          password: formData.password,
           status: "online",
           location: formData.location,
           rentalDate: formData.rentalDate,

@@ -409,8 +409,8 @@ const Progres = () => {
                 </tr>
               </thead>
               <tbody>
-                {progressData.map((prog) => (
-                  <tr key={prog.id}>
+                {progressData.map((prog, index) => (
+                  <tr key={`progress-${prog.id || index}-${index}`}>
                     <td className="py-2 px-4 border-b">{prog.id}</td>
                     <td className="py-2 px-4 border-b">{prog.email || prog.namaPembeli || prog.userName || prog.order_id || ""}</td>
                     <td className="py-2 px-4 border-b">{prog.namaPembeli || ""}</td>
@@ -475,4 +475,3 @@ const Progres = () => {
 };
 
 export default Progres;
-

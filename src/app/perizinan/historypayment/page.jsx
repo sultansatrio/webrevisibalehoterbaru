@@ -613,8 +613,8 @@ const TransactionHistory = () => {
         {transactions.length === 0 ? (
           <p>Belum ada transaksi.</p>
         ) : (
-          transactions.map((transaction) => (
-            <div key={transaction.id} className="mb-6 border p-4 rounded">
+          transactions.map((transaction, index) => (
+            <div key={`perizinan-history-${transaction.id || index}-${index}`} className="mb-6 border p-4 rounded">
               <h2 className="text-xl font-semibold mb-2">Order ID: {transaction.id}</h2>
               <p><strong>User Name:</strong> {transaction.userName || "Tidak Diketahui"}</p>
               <p><strong>Tanggal:</strong> {new Date(transaction.timeStamp?.toDate()).toLocaleString()}</p>
@@ -702,8 +702,8 @@ const TransactionHistory = () => {
 ) : (
   transactionsCustome
     .filter((transactionCustome) => transactionCustome.statusCustome === "Di Acc Admin Silahkan Memasukkan ke Keranjang")
-    .map((transactionCustome) => (
-      <div key={transactionCustome.id} className="mb-6 border p-4 rounded">
+    .map((transactionCustome, index) => (
+      <div key={`perizinan-custome-${transactionCustome.id || index}-${index}`} className="mb-6 border p-4 rounded">
         <h3 className="text-lg font-medium mt-4">Pesanan:</h3>
         <h2 className="text-xl font-semibold mb-2">Order ID: {transactionCustome.judul}</h2>
         <h2 className="text-xl font-semibold mb-2">Pembeli: {transactionCustome.namaPembeli}</h2>
@@ -755,8 +755,8 @@ const TransactionHistory = () => {
 ) : (
   transactionsCustomeGambar
     .filter((transactionsCustomeGambar) => transactionsCustomeGambar.status === "Di Acc Admin Silahkan Memasukkan ke Keranjang")
-    .map((transactionsCustomeGambar) => (
-      <div key={transactionsCustomeGambar.id} className="mb-6 border p-4 rounded">
+    .map((transactionsCustomeGambar, index) => (
+      <div key={`perizinan-gambar-${transactionsCustomeGambar.id || index}-${index}`} className="mb-6 border p-4 rounded">
         <h3 className="text-lg font-medium mt-4">Pesanan:</h3>
         <h2 className="text-xl font-semibold mb-2">Order ID: {transactionsCustomeGambar.judul}</h2>
         <h2 className="text-xl font-semibold mb-2">Pembeli: {transactionsCustomeGambar.namaPembeli}</h2>
@@ -843,7 +843,6 @@ const TransactionHistory = () => {
 };
 
 export default TransactionHistory;
-
 
 
 

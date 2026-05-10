@@ -481,9 +481,9 @@ const verifyOtp = async () => {
               </li>
             )}
             {cart &&
-              cart.map((data) => (
+              cart.map((data, index) => (
                 <li
-                  key={data.id}
+                  key={`cart-${data.id || index}-${index}`}
                   className="flex flex-row items-center justify-between mt-4"
                 >
                   <img

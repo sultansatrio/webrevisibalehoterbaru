@@ -48,6 +48,10 @@ const SignIn = () => {
       }
       setErrors(newErrors);
 
+      if (Object.keys(newErrors).length > 0) {
+        return;
+      }
+
       const userCredential = await signInWithEmailAndPassword(
         auth,
         formData.email,
@@ -80,11 +84,9 @@ const SignIn = () => {
       let errorMessage = error.message;
       if (errorMessage == "Firebase: Error (auth/invalid-email).") {
         errorMessage = "Email yang anda masukkan salah";
-      } else if ((errorMessage = "Firebase: Error (auth/missing-password).")) {
+      } else if (errorMessage === "Firebase: Error (auth/missing-password).") {
         errorMessage = "Password anda salah";
-      } else if (
-        (errorMessage = "Firebase: Error (auth/invalid-credential).")
-      ) {
+      } else if (errorMessage === "Firebase: Error (auth/invalid-credential).") {
         errorMessage = "Email atau password salah";
       }
       setToastMessage(errorMessage);

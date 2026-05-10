@@ -1703,9 +1703,9 @@ const CartDrawer = () => {
             {cart.length === 0 && jangkauanCustomData.length === 0 && (
               <li className="text-center p-10">Anda Tidak Memiliki Pesanan...</li>
             )}
-            {cart.map((data) => (
+            {cart.map((data, index) => (
               <li
-                key={data.id}
+                key={`cart-${data.id || index}-${index}`}
                 className="flex flex-row items-center justify-between mt-4"
               >
                 <img
@@ -1725,9 +1725,9 @@ const CartDrawer = () => {
                 </button>
               </li>
             ))}
-            {jangkauanCustomData.map((item) => (
+            {jangkauanCustomData.map((item, index) => (
               <li
-                key={item.id}
+                key={`custome-${item.id || index}-${index}`}
                 className="flex flex-col items-start justify-between mt-4 border-b pb-4"
               >
                 <img
@@ -1790,4 +1790,3 @@ const CartDrawer = () => {
 };
 
 export default CartDrawer;
-

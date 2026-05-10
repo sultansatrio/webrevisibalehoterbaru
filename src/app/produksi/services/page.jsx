@@ -1239,6 +1239,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth"; // Import Firebase 
 const Services = ({ transaction }) => {
   const [cartMutasiTransactions, setCartMutasiTransactions] = useState([]);
   const [cartMutasiCustome3Transactions, setCartMutasiCustome3Transactions] = useState([]);
+  const [transactionsCustome, setTransactionsCustome] = useState([]);
   const [progressData, setProgressData] = useState({});
     const [loading, setLoading] = useState(true);
   const [uploadImage, setUploadImage] = useState({});
@@ -1782,8 +1783,8 @@ const Services = ({ transaction }) => {
           {transactionAcc.length === 0 ? (
             <p className="text-center text-gray-600">Belum ada transaksi di Cart Mutasi.</p>
           ) : (
-            transactionAcc.map((transaction) => (
-              <div key={transaction.id} className="mb-6 p-6 border-2 border-gray-200 rounded-lg shadow-lg">
+            transactionAcc.map((transaction, index) => (
+              <div key={`progress-cart-${transaction.id || index}-${index}`} className="mb-6 p-6 border-2 border-gray-200 rounded-lg shadow-lg">
                 <h3 className="text-xl font-semibold mb-2 text-blue-600">Order ID: {transaction.id}</h3>
                 <div className="flex justify-between items-center mb-4">
                   <div>
@@ -1867,8 +1868,8 @@ const Services = ({ transaction }) => {
           {cartMutasiTransactionCustomeGambar.length === 0 ? (
             <p className="text-center text-gray-600">Belum ada transaksi di Cart Mutasi Custome3.</p>
           ) : (
-            cartMutasiTransactionCustomeGambar.map((transaction) => (
-              <div key={transaction.id} className="mb-6 p-6 border-2 border-gray-200 rounded-lg shadow-lg">
+            cartMutasiTransactionCustomeGambar.map((transaction, index) => (
+              <div key={`progress-custom-${transaction.id || index}-${index}`} className="mb-6 p-6 border-2 border-gray-200 rounded-lg shadow-lg">
                 <h3 className="text-xl font-semibold mb-2 text-blue-600">Order ID: {transaction.id}</h3>
                 <div className="flex justify-between items-center mb-4">
                   <div>
@@ -2206,4 +2207,3 @@ export default Services;
 // };
 
 // export default Services;
-

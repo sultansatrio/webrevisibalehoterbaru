@@ -802,11 +802,11 @@ const Product = () => {
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
-    // const numericPrice = parseFloat(price);
-    const numericPrice = parseFloat(jangkauan);
+    const numericPrice = parseFloat(price);
     const numericPriceJangkauan = parseFloat(priceJangkauan);
+    const durationMonths = parseInt(jangkauan, 10);
 
-    if (isNaN(numericPrice) || isNaN(numericPriceJangkauan)) {
+    if (isNaN(numericPrice) || isNaN(numericPriceJangkauan) || isNaN(durationMonths)) {
       console.error("Price fields must be numeric.");
       return;
     }
@@ -820,7 +820,7 @@ const Product = () => {
       statusCustome,
       jangkauan,
       priceJangkauan: numericPriceJangkauan,
-      price: numericPrice * numericPriceJangkauan,
+      price: numericPrice || durationMonths * numericPriceJangkauan,
     };
 
     try {
@@ -1221,4 +1221,3 @@ const Product = () => {
 };
 
 export default Product;
-

@@ -895,8 +895,8 @@ const TransactionHistory = () => {
         {transactionAcc.length === 0 ? (
           <p>Belum ada transaksi.</p>
         ) : (
-          transactionAcc.map((transaction) => (
-            <div key={transaction.id} className="mb-6 border p-4 rounded">
+        transactionAcc.map((transaction, index) => (
+          <div key={`approval-${transaction.id || index}-${index}`} className="mb-6 border p-4 rounded">
               <h2 className="text-xl font-semibold mb-2">Order ID: {transaction.id}</h2>
               <p><strong>User Name:</strong> {transaction.userName || "Tidak Diketahui"}</p>
               <p><strong>Tanggal:</strong> {new Date(transaction.timeStamp?.toDate()).toLocaleString()}</p>
@@ -980,8 +980,8 @@ const TransactionHistory = () => {
       {transactionAcc.length === 0 ? (
         <p>Belum ada transaksi.</p>
       ) : (
-        transactionAcc.map((transaction) => (
-          <div key={transaction.id} className="mb-6 border p-4 rounded">
+        transactionAcc.map((transaction, index) => (
+          <div key={`history-${transaction.id || index}-${index}`} className="mb-6 border p-4 rounded">
             <h2 className="text-xl font-semibold mb-2">Order ID: {transaction.id}</h2>
             <p><strong>Deskripsi:</strong> {transaction.description}</p>
             <p><strong>Harga:</strong> {transaction.price}</p>
@@ -1038,35 +1038,35 @@ const TransactionHistory = () => {
                 {transaction.statusCustome === 'Transaksi Sukses, Baleho Sudah Di Order' ? 'Transaksi Sukses' : 'Transaksi Sukses'}
               </button>
             </div> */}
-            <td>
-                          <button
-                            className="bg-blue-500 text-white px-3 py-1 rounded"
-                            onClick={() => handleApproval(transaction.id)}
-                            disabled={transaction.status === "disetujui"} // Disable if already approved
-                          >
-                            {transaction.statusCustome === "disetujui"
-                              ? "Sudah Disetujui"
-                              : "Setujui"}
-                          </button>
-                          <button
-                            className="bg-green-500 text-white px-3 py-1 rounded ml-2"
-                            onClick={() => handleSuccessTransaction(transaction.id)}
-                            disabled={transaction.statusCustome === "Transaksi Sukses,Baleho Sudah Di Order"} // Disable if already successful
-                          >
-                            {transaction.statusCustome === "Transaksi Sukses,Baleho Sudah Di Order"
-                              ? "Transaksi Sukses"
-                              : "Transaksi Sukses"}
-                          </button>
-                          <button
-                            className="bg-yellow-500 text-white px-3 py-1 rounded ml-2"
-                            onClick={() => handleRemoveBaleho(transaction.id)}
-                            disabled={transaction.statusCustome === "Baleho Ready"} // Disable if already marked as ready
-                          >
-                            {transaction.statusCustome === "Baleho Ready"
-                              ? "Baleho Ready"
-                              : "Copot Baleho"}
-                          </button>
-                        </td>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                className="bg-blue-500 text-white px-3 py-1 rounded"
+                onClick={() => handleApproval(transaction.id)}
+                disabled={transaction.status === "disetujui"} // Disable if already approved
+              >
+                {transaction.statusCustome === "disetujui"
+                  ? "Sudah Disetujui"
+                  : "Setujui"}
+              </button>
+              <button
+                className="bg-green-500 text-white px-3 py-1 rounded ml-2"
+                onClick={() => handleSuccessTransaction(transaction.id)}
+                disabled={transaction.statusCustome === "Transaksi Sukses,Baleho Sudah Di Order"} // Disable if already successful
+              >
+                {transaction.statusCustome === "Transaksi Sukses,Baleho Sudah Di Order"
+                  ? "Transaksi Sukses"
+                  : "Transaksi Sukses"}
+              </button>
+              <button
+                className="bg-yellow-500 text-white px-3 py-1 rounded ml-2"
+                onClick={() => handleRemoveBaleho(transaction.id)}
+                disabled={transaction.statusCustome === "Baleho Ready"} // Disable if already marked as ready
+              >
+                {transaction.statusCustome === "Baleho Ready"
+                  ? "Baleho Ready"
+                  : "Copot Baleho"}
+              </button>
+            </div>
           </div>
         ))
       )}
@@ -1076,8 +1076,8 @@ const TransactionHistory = () => {
 ) : (
   transactionsCustome
     .filter((transactionCustome) => transactionCustome.statusCustome === "Di Acc Admin Silahkan Memasukkan ke Keranjang")
-    .map((transactionCustome) => (
-      <div key={transactionCustome.id} className="mb-6 border p-4 rounded">
+    .map((transactionCustome, index) => (
+      <div key={`custome-${transactionCustome.id || index}-${index}`} className="mb-6 border p-4 rounded">
         <h3 className="text-lg font-medium mt-4">Pesanan:</h3>
         <h2 className="text-xl font-semibold mb-2">Order ID: {transactionCustome.judul}</h2>
         <p className="text-xl font-semibold mb-2">Deksripsi: {transactionCustome.deskripsi}</p>
@@ -1133,8 +1133,8 @@ const TransactionHistory = () => {
 ) : (
   transactionsCustomeGambar
     .filter((transactionsCustomeGambar) => transactionsCustomeGambar.statusCustome === "Menunggu Kabar Acc Admin")
-    .map((transactionsCustomeGambar) => (
-      <div key={transactionsCustomeGambar.id} className="mb-6 border p-4 rounded">
+    .map((transactionsCustomeGambar, index) => (
+      <div key={`gambar-${transactionsCustomeGambar.id || index}-${index}`} className="mb-6 border p-4 rounded">
         <h3 className="text-lg font-medium mt-4">Pesanan:</h3>
         <h2 className="text-xl font-semibold mb-2">Order ID: {transactionsCustomeGambar.judul}</h2>
         <h2 className="text-xl font-semibold mb-2">Pembeli: {transactionsCustomeGambar.namaPembeli}</h2>

@@ -1,3 +1,5 @@
+"use client";
+
 // // Mutasi.jsx
 
 // import React from 'react';

@@ -2458,8 +2458,8 @@ const generateExcel = (transactions) => {
       {transactionAcc.length === 0 ? (
         <p>Belum ada transaksi.</p>
       ) : (
-        transactionAcc.map((transaction) => (
-          <div key={transaction.id} className="mb-6 border p-4 rounded">
+        transactionAcc.map((transaction, index) => (
+          <div key={`admin-history-${transaction.id || index}-${index}`} className="mb-6 border p-4 rounded">
             <h2 className="text-xl font-semibold mb-2">Order ID: {transaction.id}</h2>
             <p><strong>Deskripsi:</strong> {transaction.description}</p>
             <p><strong>Client Name:</strong> {transaction.companyName||transaction.userName || transaction.namaPembeli || transaction.email ||"Tidak Diketahui"}</p>
@@ -2525,8 +2525,8 @@ const generateExcel = (transactions) => {
 ) : (
   transactionsCustome
     .filter((transactionCustome) => transactionCustome.statusCustome === "Di Acc Admin Silahkan Memasukkan ke Keranjang")
-    .map((transactionCustome) => (
-      <div key={transactionCustome.id} className="mb-6 border p-4 rounded">
+    .map((transactionCustome, index) => (
+      <div key={`admin-custome-${transactionCustome.id || index}-${index}`} className="mb-6 border p-4 rounded">
         <h3 className="text-lg font-medium mt-4">Pesanan:</h3>
         <h2 className="text-xl font-semibold mb-2">Order ID: {transactionCustome.judul}</h2>
         <h2 className="text-xl font-semibold mb-2">Pembeli: {transactionCustome.namaPembeli}</h2>
@@ -2565,8 +2565,8 @@ const generateExcel = (transactions) => {
 ) : (
   transactionsCustomeGambar
     .filter((item) => item.statusCustome === "Menunggu Kabar Acc Admin")
-    .map((transactionsCustomeGambar) => (
-      <div key={transactionsCustomeGambar.id} className="mb-6 border p-4 rounded">
+    .map((transactionsCustomeGambar, index) => (
+      <div key={`admin-gambar-${transactionsCustomeGambar.id || index}-${index}`} className="mb-6 border p-4 rounded">
         <h3 className="text-lg font-medium mt-4">Pesanan:</h3>
         <h2 className="text-xl font-semibold mb-2">Order ID: {transactionsCustomeGambar.judul}</h2>
         <h2 className="text-xl font-semibold mb-2">Pembeli: {transactionsCustomeGambar.namaPembeli}</h2>

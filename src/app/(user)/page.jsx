@@ -719,23 +719,17 @@
 
 
 "use client";
-import CardItem from "@/components/CardItem";
 import Navbar from "@/components/Navbar";
-import Image from "next/image";
 import Footer from "@/components/Footer";
 import useAuth from "../hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import ProductInti from "./productinti/page";
 import { db } from "@/firebase/firebase";
-// Import Firebase Authentication
 import { getAuth } from "firebase/auth";
 
 import { collection, onSnapshot, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import useProduct from "@/app/hooks/useProduct";
-import CardItemTampilan from "@/components/CardItemTampilan";
 import useNavigation from "../hooks/useNavigation";
-import Product from "./product/page";
 
 export default function Home() {
   const { user, userProfile } = useAuth();
@@ -749,7 +743,6 @@ export default function Home() {
   const [assetNotification, setAssetNotification] = useState(false);
   const { isInCart, removeFromCart, addToCart } = useProduct();
   const [userName, setUserName] = useState(""); // Inisialisasi state userName dengan nilai awal kosong
-  const [selectedProduct, setSelectedProduct] = useState(null);
   const [showInput, setShowInput] = useState(true); // Initialize with true or false based on your need
 
   // Initialize Firebase Authentication
@@ -913,18 +906,13 @@ const userData = {
   // };
 
 
-  const handleImageClick = (product) => {
-    setSelectedProduct(product);
-  };
-
   useEffect(() => {
-    if (user && userProfile.role === "admin") {
+    if (user && userProfile?.role === "admin") {
       router.push("/admin");
-    } else if (user && userProfile.role === "user") {
-      // Jika user adalah admin, kita dapat menampilkan alert selamat datang
-      // dan menampilkan nama admin dari userProfile
-      alert("Selamat datang, " + userProfile.name ||userProfile.email || "Pelanggan");
-      setUserName(userProfile.email || userProfile.name  || "Pelanggan");
+    } else if (user && userProfile?.role === "user") {
+      const displayName = userProfile?.name || userProfile?.email || "Pelanggan";
+      alert(`Selamat datang, ${displayName}`);
+      setUserName(displayName);
     }
   }, [user, userProfile, router]);
 
@@ -948,7 +936,7 @@ const userData = {
   // Filter data berdasarkan input pencarian
   useEffect(() => {
     const filtered = data.filter((product) =>
-      product.category.toLowerCase().includes(searchInput)
+      (product.category || "").toLowerCase().includes(searchInput)
     );
     setFilteredData(filtered);
     setCategoryFilter(searchInput);
@@ -980,11 +968,13 @@ const userData = {
 
   useEffect(() => {
     const selectElement = document.querySelector(".select");
-    selectElement.childNodes.forEach((option) => {
-      if (option.value.toLowerCase().includes(searchInput)) {
-        option.selected = true;
-      }
-    });
+    if (selectElement) {
+      selectElement.childNodes.forEach((option) => {
+        if (option.value.toLowerCase().includes(searchInput)) {
+          option.selected = true;
+        }
+      });
+    }
     setCategoryFilter(searchInput);
   }, [searchInput]);
 
@@ -1047,25 +1037,21 @@ const userData = {
             <p>Loading products...</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 place-items-center gap-6">
-              {filteredData.map((product) => (
-                <div key={product.id}>
+              {filteredData.map((product, index) => (
+                <div key={`product-${product.id || index}-${index}`}>
                   <img
                     src={product.image}
                     alt={product.title}
-                    className="cursor-pointer"
-                    onClick={() => handleImageClick(product)}
+                    className="w-full object-cover"
                   />
-                  {/* Hanya tampilkan detail jika produk ini yang diklik */}
-                  {selectedProduct && selectedProduct.id === product.id && (
-                    <div className="p-4 border rounded-lg shadow-md mt-4">
-                      <h2 className="text-xl font-bold">{product.title}</h2>
-                      <p className="text-gray-700">Category: {product.category}</p>
-                      <p className="text-gray-600">{product.description}</p>
-                      <p className="text-orange-500 font-bold">
-                        Price: Rp{product.price}
-                      </p>
-                    </div>
-                  )}
+                  <div className="p-4 border rounded-lg shadow-md mt-4 bg-white">
+                    <h2 className="text-xl font-bold">{product.title}</h2>
+                    <p className="text-gray-700">Category: {product.category}</p>
+                    <p className="text-gray-600">{product.description}</p>
+                    <p className="text-orange-500 font-bold">
+                      Price: Rp{product.price}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -1165,7 +1151,6 @@ const userData = {
             </div>
           )}
         </div>
-        <Product/>
       </div>
       <Footer />
     
